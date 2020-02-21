@@ -11,7 +11,10 @@ class RNNModel(nn.Module):
         self.drop = nn.Dropout(dropout)
         self.encoder = nn.Embedding(ntoken, ninp)
         if rnn_type in ['LSTM', 'GRU']:
-            self.rnn = getattr(nn, rnn_type)(ninp, nhid, nlayers, dropout=dropout)
+            #self.rnn = getattr(nn, rnn_type)(ninp, nhid, nlayers, dropout=dropout)
+            from custom_lstms import script_lstm, script_lnlstm
+            self.rnn = script_lstm(ninp, nhid, nlayers, dropout=True)
+            #self.rnn = script_lnlstm(ninp, nhid, nlayers)
         else:
             try:
                 nonlinearity = {'RNN_TANH': 'tanh', 'RNN_RELU': 'relu'}[rnn_type]
